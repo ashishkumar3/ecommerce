@@ -1,7 +1,7 @@
 {
   "env": {
-    "MONGO_USER": "ashish",
-    "MONGO_PASSWORD": "eb5CT2mv7vz1h7Ph",
-    "MONGO_DB": "restaurant-tables-db"
+    "MONGO_USER": "ashishk",
+    "MONGO_PASSWORD": "byBTwL4AyPL6PlvC",
+    "MONGO_DB": "test"
   }
 }

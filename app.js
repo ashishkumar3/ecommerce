@@ -1,9 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
+const morgan = require("morgan");
 
-// GRAPHQL
-const graphqlHttp = require("express-graphql");
-const { buildSchema } = require("graphql");
+// ROUTES
+const dashboard = require("./routes/dashboard");
+const login = require("./routes/login");
+const signup = require("./routes/signup");
 
 // MONGO
 const mongoose = require("mongoose");
@@ -11,51 +14,55 @@ const mongoose = require("mongoose");
 // BCRYPT for password hashing.
 const bcrypt = require("bcryptjs");
 
-// IMPORT MODELS
-const Table = require("./models/table");
-const User = require("./models/user");
-
+// create express app.
 const app = express();
 
-// configure graphql schema
-app.use(
-  "/api",
-  graphqlHttp({
-    /*
-    Schema, rootvalue and graphiql
-    schema use buildSchema function which takes a string as schema
-    rootvalue has all the queries and mutations logic
-  */
+// serving static files.
+app.use(express.static(path.join(__dirname, "/public")));
+app.use(bodyParser.json());
 
-  schema: buildSchema(`
-    type Item{
-      
-    }
+// managing CORS errors
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
 
-    type rootQuery: {
-      items: [Item!]
-    }
+// set the view engine to ejs
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-    type rootMutation: {
-      orderItems(itemID, itemName, itemPrice): Item
-    }
+app.use(morgan("dev"));
 
-    schema: {
-      query: rootQuery,
-      mutation: rootMutation
-    }
-  `),
-  rootValue: ,
-  graphiql: true
-  })
-);
+app.use(dashboard);
+app.use(login);
+app.use(signup);
 
-// gives error when used with template strings. not able to use env variables
+// error 404 not found
+app.use((req, res, next) => {
+  res.status(404).send("pages/404");
+});
+
+// error 500 internal server error
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.send("pages/500");
+});
+
 mongoose
   .connect(
-    `mongodb+srv://ashish:eb5CT2mv7vz1h7Ph@cluster0-b4fmv.mongodb.net/${
+    `mongodb+srv://${process.env.MONGO_USER}:${
+      process.env.MONGO_PASSWORD
+    }@cluster0-av2gk.mongodb.net/${
       process.env.MONGO_DB
-    }?retryWrites=true`
+    }?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(3000, () => {

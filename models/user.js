@@ -16,7 +16,7 @@ const userSchema = new Schema({
   orderedItems: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Table"
+      ref: "Item"
     }
   ]
 });
