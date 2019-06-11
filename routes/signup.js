@@ -6,6 +6,10 @@ const signupController = require("../controller/signup");
 // get the signup page
 router.get("/signup", signupController.get_signup);
 
+router.get("/users", signupController.get_users);
+
+router.get("/logout", signupController.logout);
+
 // create a new user account
 router.post("/add-user", signupController.add_user);
 

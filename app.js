@@ -2,6 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const morgan = require("morgan");
+const ejslayouts = require("express-ejs-layouts");
+const flash = require("connect-flash");
+const session = require("express-session");
+const passport = require("passport");
 
 // ROUTES
 const dashboard = require("./routes/dashboard");
@@ -11,15 +15,40 @@ const signup = require("./routes/signup");
 // MONGO
 const mongoose = require("mongoose");
 
-// BCRYPT for password hashing.
-const bcrypt = require("bcryptjs");
-
 // create express app.
 const app = express();
+
+// passport config
+require("./config/passport")(passport);
 
 // serving static files.
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// express session
+app.use(
+  session({
+    secret: "a4f8071f-c873-4447-8ee2",
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// connect flash
+app.use(flash());
+
+// global vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 // managing CORS errors
 app.use((req, res, next) => {
@@ -36,8 +65,18 @@ app.use((req, res, next) => {
 });
 
 // set the view engine to ejs
+app.use(ejslayouts);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+// remove caching for back button
+app.use((req, res, next) => {
+  res.set(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  next();
+});
 
 app.use(morgan("dev"));
 

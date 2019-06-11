@@ -7,6 +7,17 @@ exports.get_signup = (req, res) => {
   res.render("signup", { title: "signup" });
 };
 
+// get users from db
+exports.get_users = (req, res) => {
+  User.find()
+    .then(doc => {
+      res.status(201).send(doc);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 // add a new user to db
 exports.add_user = (req, res) => {
   if (!req.body) {
@@ -27,6 +38,7 @@ exports.add_user = (req, res) => {
         });
       }
       const newUser = new User({
+        name: req.body.name,
         email: req.body.email,
         password: hash
       });
@@ -36,11 +48,13 @@ exports.add_user = (req, res) => {
           if (!doc || doc.length === 0) {
             return res.status(500).send(doc);
           }
-          res.status(201).send(doc);
+          req.flash("success_msg", "You are now registered and can log in.");
+          res.status(201).redirect("/login");
           console.log(`User added to db: ${doc}`);
         })
         .catch(err => {
           res.status(500).json(err);
+          console.log(err);
         });
     });
   });
@@ -80,4 +94,10 @@ exports.remove_user_with_id = (req, res) => {
         res.status(500).json(err);
       });
   });
+};
+
+exports.logout = (req, res) => {
+  req.logout();
+  req.flash("success_msg", "You are logged out");
+  res.redirect("/login");
 };

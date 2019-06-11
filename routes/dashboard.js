@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { ensureAuthenticated } = require("../config/auth");
 
 const dashboardController = require("../controller/dashboard");
 
 // get the dashboard page
-router.get("/", dashboardController.get_dashboard);
+router.get("/", ensureAuthenticated, dashboardController.get_dashboard);
 
 module.exports = router;
