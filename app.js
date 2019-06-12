@@ -90,6 +90,14 @@ app.use(user);
 //   res.render("random");
 // });
 
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
+app.get("/pricing", (req, res) => {
+  res.render("pricing");
+});
+
 // error 404 not found
 app.use((req, res, next) => {
   res.status(404).send("pages/404");
