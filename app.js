@@ -10,9 +10,9 @@ const session = require("express-session");
 const passport = require("passport");
 
 // ROUTES
-const dashboard = require("./routes/dashboard");
-const login = require("./routes/login");
-const user = require("./routes/user");
+const dashboard = require("./routes/dashboard.route");
+const login = require("./routes/login.route");
+const user = require("./routes/user.route");
 
 // MONGO
 const mongoose = require("mongoose");
