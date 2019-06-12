@@ -2,7 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const morgan = require("morgan");
+
 const ejslayouts = require("express-ejs-layouts");
+
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
@@ -10,7 +12,7 @@ const passport = require("passport");
 // ROUTES
 const dashboard = require("./routes/dashboard");
 const login = require("./routes/login");
-const signup = require("./routes/signup");
+const user = require("./routes/user");
 
 // MONGO
 const mongoose = require("mongoose");
@@ -29,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // express session
 app.use(
   session({
-    secret: "a4f8071f-c873-4447-8ee2",
+    secret: "a4f80asd71f-c87dq3-4447gd-8ed3gbe2",
     resave: true,
     saveUninitialized: true
   })
@@ -82,7 +84,11 @@ app.use(morgan("dev"));
 
 app.use(dashboard);
 app.use(login);
-app.use(signup);
+app.use(user);
+
+// app.get("/random", (req, res) => {
+//   res.render("random");
+// });
 
 // error 404 not found
 app.use((req, res, next) => {

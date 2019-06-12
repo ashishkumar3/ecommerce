@@ -1,14 +1,15 @@
+const passport = require("passport");
 const bcrypt = require("bcryptjs");
 // Models
 const User = require("../models/user");
 
 // get signup page
-exports.get_signup = (req, res) => {
+exports.get_signup_page = (req, res) => {
   res.render("signup", { title: "signup" });
 };
 
 // get users from db
-exports.get_users = (req, res) => {
+exports.get_all_users = (req, res) => {
   User.find()
     .then(doc => {
       res.status(201).send(doc);
@@ -60,6 +61,15 @@ exports.add_user = (req, res) => {
   });
 };
 
+exports.get_user_by_id = (req, res) => {
+  User.findById(req.user.id, (err, doc) => {
+    if (err) res.status(500).json(err);
+    if (doc) {
+      return res.status(201).json(doc);
+    }
+  });
+};
+
 exports.update_user = (req, res) => {
   if (!req.query.email) {
     return res.status(400).send("Missing URL parameter: email");
@@ -96,8 +106,18 @@ exports.remove_user_with_id = (req, res) => {
   });
 };
 
+// logout
 exports.logout = (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
   res.redirect("/login");
+};
+
+//login
+exports.login_user = (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true
+  })(req, res, next);
 };
