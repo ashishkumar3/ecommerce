@@ -3,16 +3,19 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const morgan = require("morgan");
 
-const ejslayouts = require("express-ejs-layouts");
-
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
 
 // ROUTES
-const dashboard = require("./routes/dashboard.route");
-const login = require("./routes/login.route");
-const user = require("./routes/user.route");
+const dashboardRoutes = require("./routes/dashboard.route");
+const loginRoutes = require("./routes/login.route");
+const userRoutes = require("./routes/user.route");
+const adminRoutes = require("./routes/admin.route");
+const shopRoutes = require("./routes/shop.route");
+
+// CONTROLLERS
+const errorController = require("./controllers/error.controller");
 
 // MONGO
 const mongoose = require("mongoose");
@@ -24,7 +27,7 @@ const app = express();
 require("./config/passport")(passport);
 
 // serving static files.
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -67,7 +70,6 @@ app.use((req, res, next) => {
 });
 
 // set the view engine to ejs
-app.use(ejslayouts);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -82,32 +84,26 @@ app.use((req, res, next) => {
 
 app.use(morgan("dev"));
 
-app.use(dashboard);
-app.use(login);
-app.use(user);
+app.use(dashboardRoutes);
+app.use(loginRoutes);
+app.use(userRoutes);
+app.use("/admin", adminRoutes);
+app.use(shopRoutes);
 
 // app.get("/random", (req, res) => {
 //   res.render("random");
 // });
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
 app.get("/pricing", (req, res) => {
+  // process.exit();
   res.render("pricing");
 });
 
 // error 404 not found
-app.use((req, res, next) => {
-  res.status(404).send("pages/404");
-});
+app.use(errorController.get404);
 
 // error 500 internal server error
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.send("pages/500");
-});
+// app.use(errorController.get500);
 
 mongoose
   .connect(

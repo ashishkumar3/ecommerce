@@ -1,0 +1,27 @@
+<%- include('../partials/head.ejs') %>
+</head>
+<body>
+    <%- include('../partials/navigation.ejs') %>
+  <div class="container">
+      <h3>Add Product</h3>
+      <form action="/admin/product" method="POST">
+        <div class="form-group">
+          <label for="productName">Product Name</label>
+          <input type="text" class="form-control" id="inputProductName" aria-describedby="productHelp" placeholder="Enter product name" name="name">
+          <small id="productHelp" class="form-text text-muted">Be very specific with your product name.</small>
+        </div>
+        <div class="form-group">
+          <label for="priceInput">Price</label>
+          <input type="number" step="0.01" class="form-control" id="inputPrice" aria-describedby="priceHelp" placeholder="Enter price" name="price">
+        </div>
+        <div class="form-group">
+          <label for="descriptionInput">Description</label>
+          
+          <textarea class="form-control" id="descriptionInput" rows="3" name="description"></textarea>
+          <small id="descriptionHelp" class="form-text text-muted">Provide as much detail as you can about your product.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </form>
+  </div>
+<%- include('../partials/footer.ejs') %>
+<%- include('../partials/end.ejs') %>

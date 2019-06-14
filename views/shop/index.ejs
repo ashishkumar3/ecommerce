@@ -1,0 +1,33 @@
+<%- include('../partials/head'); %>
+<style>
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}</style>
+</head>
+
+<body>
+  <%- include('../partials/navigation'); %>
+  <div class="container">
+    <div class="products flex-column">
+      <% products.forEach(product => { %>
+        <a href="#">
+          <div class="card card-horizontal" style="width: 18rem;">
+            <img class="card-img-top" src="/img/products/iphone.jpeg" alt="Card image cap" />
+            <div class="card-body">
+              <p class="card-text">
+                <%= product.name %>
+              </p>
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                ₹<%= product.price %>
+              </p>
+            </div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+  <%- include('../partials/footer'); %>
+  <%- include('../partials/end'); %>
