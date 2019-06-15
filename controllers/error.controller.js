@@ -1,7 +1,13 @@
 exports.get404 = (req, res, next) => {
-  res.status(404).render("errors/404", { pageContent: "Error 404: Page not found" });
+  res.status(404).render("errors/404", {
+    pageContent: "Error 404: Page not found",
+    path: ""
+  });
 };
 
 exports.get500 = (err, req, res, next) => {
-  res.render("errors/500", { pageContent: "Error 500: Internal server error" });
+  res.render("errors/500", {
+    pageContent: "Error 500: Internal server error",
+    path: ""
+  });
 };

@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 // get signup page
 exports.get_signup_page = (req, res) => {
-  res.render("signup", { title: "signup" });
+  res.render("signup", { title: "signup", path: "/signup" });
 };
 
 // get users from db
