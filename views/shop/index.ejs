@@ -17,22 +17,23 @@
       </div>
     </div>
     <% products.forEach(product => { %>
-    <div class="w-1/5 m-2">
-      <div class="rounded overflow-hidden shadow-lg">
-        <img class="" src="/img/products/iphone.jpeg" alt="<%= product.name %>">
-        <div class="px-6 py-2">
-          <div class="font-bold text-xl mb-2"><%= product.name %></div>
-          <p class="text-gray-700 text-base">
-            ₹<%= product.price %>
-          </p>
-        </div>
-        <div class="px-6 py-2">
-          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#iphone</span>
-          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#camera</span>
+    <a href="/product/<%= product.id %>">
+      <div class="w-1/5 m-2">
+        <div class="rounded overflow-hidden shadow-lg">
+          <img class="" src="<%= product.imageUrl %>" alt="<%= product.name %>">
+          <div class="px-6 py-2">
+            <div class="font-bold text-xl mb-2"><%= product.name %></div>
+            <p class="text-gray-700 text-base">
+              ₹<%= product.price %>
+            </p>
+          </div>
+          <div class="px-6 py-2">
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"><%= product.description %></span>
+          </div>
         </div>
       </div>
-      <% }) %>
-    </div>
+    </a>
+    <% }) %>
     <%- include('../partials/footer'); %>
   </div>
   <%- include('../partials/end'); %>

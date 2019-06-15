@@ -7,6 +7,9 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
 
+// DB
+const mongoose = require("mongoose");
+
 // ROUTES
 const dashboardRoutes = require("./routes/dashboard.route");
 const loginRoutes = require("./routes/login.route");
@@ -16,9 +19,6 @@ const shopRoutes = require("./routes/shop.route");
 
 // CONTROLLERS
 const errorController = require("./controllers/error.controller");
-
-// MONGO
-const mongoose = require("mongoose");
 
 // create express app.
 const app = express();
@@ -115,7 +115,7 @@ mongoose
     }?retryWrites=true&w=majority`
   )
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(3000, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })

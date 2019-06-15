@@ -33,3 +33,21 @@ exports.getCheckoutPage = (req, res, next) => {
 exports.getOrdersPage = (req, res, next) => {
   res.render("shop/orders", { pageTitle: "Orders", path: "/orders" });
 };
+
+// get product details by passing id
+exports.getProductById = (req, res, next) => {
+  const productId = req.params.productId;
+  //console.log(productId);
+  Product.findById(productId)
+    .then(product => {
+      console.log("Product with given id found!");
+      res.status(201).render("shop/product-details", {
+        pageTitle: "Product Details",
+        path: "/shop/product-details",
+        product: product
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
