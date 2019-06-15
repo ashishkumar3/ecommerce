@@ -15,6 +15,7 @@ exports.get_dashboard = (req, res) => {
   res.render("dashboard", {
     title: "Dashboard",
     id: req.user.id,
+    path: "/dashboard",
     username: username
   });
 };

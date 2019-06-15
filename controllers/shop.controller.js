@@ -8,7 +8,8 @@ exports.getIndexPage = (req, res, next) => {
       res.status(201).render("shop/index", {
         pageTitle: "Shop",
         path: "/",
-        products: productDoc
+        products: productDoc,
+        id: null
       });
     })
     .catch(err => {

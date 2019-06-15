@@ -1,7 +1,7 @@
 const passport = require("passport");
 
 exports.get_login = (req, res) => {
-  res.render("login", { title: "Login" });
+  res.render("login", { pageTitle: "Login", id: null });
 };
 
 // login a user

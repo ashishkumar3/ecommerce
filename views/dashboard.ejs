@@ -1,8 +1,11 @@
+<%- include('partials/head'); %>
+</head>
+<body>
+    <%- include('partials/navigation'); %>
 <h1><%= title %></h1>
 <ul>
   <li><%= id %></li>
-
-  <li><a href="/profile">signup</a></li>
+  <li><%= username %></li>
   <li><a href="/logout">logout</a></li>
 </ul>
-<%- include('partials/footer') %>
+
