@@ -25,11 +25,28 @@ exports.add_user = (req, res) => {
     return res.status(400).send("Request body is missing");
   }
 
+  let { name, email, password } = req.body;
+
+  let errors = [];
+  // form validations
+  if (!name || !email || !password) {
+    errors.push({ msg: "Please fill in all the fields" });
+    return res
+      .status(409)
+      .render("signup", { errors: errors, path: "/signup" });
+  }
+
+  if (password.length < 6) {
+    errors.push({ msg: "Password must be atleast 6 characters" });
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(409).json({
-        message: "Email already exists!"
-      });
+      // req.flash("error_msg", "Email already exists!");
+      errors.push({ msg: "Email already exists!" });
+      return res
+        .status(409)
+        .render("signup", { errors: errors, path: "/signup" });
     }
 
     bcrypt.hash(req.body.password, 13, (err, hash) => {
@@ -121,3 +138,12 @@ exports.login_user = (req, res, next) => {
     failureFlash: true
   })(req, res, next);
 };
+
+//signup
+// exports.signup_user = (req, res, next) => {
+//   passport.authenticate("local", {
+//     successRedirect: "/login",
+//     failureRedirect: "/signup",
+//     failureFlash: true
+//   })(req, res, next);
+// };
