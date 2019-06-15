@@ -42,7 +42,6 @@ exports.add_user = (req, res) => {
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      // req.flash("error_msg", "Email already exists!");
       errors.push({ msg: "Email already exists!" });
       return res
         .status(409)
