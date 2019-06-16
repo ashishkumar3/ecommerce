@@ -22,6 +22,12 @@ exports.getCartPage = (req, res, next) => {
   res.render("shop/cart", { pageTitle: "Cart", path: "/cart" });
 };
 
+exports.addToCart = (req, res, next) => {
+  const productId = req.body.productId;
+  console.log("product added to cart", productId);
+  res.redirect("/");
+};
+
 // get the checkout page
 exports.getCheckoutPage = (req, res, next) => {
   res.render("shop/checkout", {

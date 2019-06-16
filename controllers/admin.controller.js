@@ -67,3 +67,41 @@ exports.getProducts = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.editProduct = (req, res, next) => {
+  const productId = req.params.productId;
+
+  Product.findById(productId)
+    .then(product => {
+      res.render("admin/edit-product", {
+        pageTitle: "Edit Product",
+        path: "/admin/edit-product",
+        product: product
+      });
+    })
+    .catch(err => console.log(err));
+};
+
+exports.updateProduct = (req, res, next) => {
+  const id = req.body.productId;
+  const updatedName = req.body.name;
+  const updatedPrice = req.body.price;
+  const updatedDescription = req.body.description;
+  const updatedImageUrl = req.body.imageUrl;
+
+  Product.findOneAndUpdate(
+    { _id: id },
+    {
+      name: updatedName,
+      price: updatedPrice,
+      description: updatedDescription,
+      imageUrl: updatedImageUrl
+    },
+    { new: true }
+  )
+    .then(product => {
+      console.log("updated product", product);
+      res.redirect("/admin/products");
+    })
+    .catch(err => console.log(err));
+};
