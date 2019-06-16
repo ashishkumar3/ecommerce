@@ -105,3 +105,29 @@ exports.updateProduct = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+// delete a product
+exports.deleteProductById = (req, res) => {
+  if (!req.body.productId) {
+    return res.status(400).send("Missing body parameter: productId");
+  }
+
+  let _id = req.body.productId;
+  console.log(_id);
+
+  Product.findOne({ _id: _id }).then(product => {
+    if (!product) {
+      return res.status(409).json({
+        message: "Cannot find this product"
+      });
+    }
+    Product.findByIdAndDelete(_id)
+      .then(doc => {
+        console.log(`Product with id ${_id} deleted from db.`);
+        res.status(200).redirect("/admin/products");
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
+};

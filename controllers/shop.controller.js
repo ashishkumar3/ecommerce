@@ -57,3 +57,8 @@ exports.getProductById = (req, res, next) => {
       console.log(err);
     });
 };
+
+// get the about page
+exports.getAboutPage = (req, res, next) => {
+  res.render("shop/about", { pageTitle: "About", path: "/about" });
+};

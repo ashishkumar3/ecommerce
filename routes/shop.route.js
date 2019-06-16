@@ -14,6 +14,9 @@ router.get("/checkout", shopController.getCheckoutPage);
 
 router.get("/orders", shopController.getOrdersPage);
 
+// get about page
+router.get("/about", shopController.getAboutPage);
+
 router.get("/product/:productId", shopController.getProductById);
 
 module.exports = router;

@@ -1,0 +1,21 @@
+<%- include('../partials/head'); %>
+</head>
+<body>
+<%- include('../partials/navigation'); %>
+
+
+<%- include('../partials/sliding-navigation'); %>
+  <div class="flex flex-col">
+    <div class="flex flex-col bg-blue-500 md:flex-row">
+      <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left p-6">
+        <div class="text-xl text-white"><p class="uppercase tracking-loose w-full">Lorem ipsum dolor sit amet.</p></div>
+        <div class="text-5xl font-bold text-white leading-tight my-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, rerum.</div>
+        <div class="leading-normal text-2xl mb-8 text-white">Lorem ipsum dolor sit, amet consectetur.</div>
+      </div>
+      <div class="p-6 md:block md:order-last order-first">
+        <img src="/img/landing-page/landingpage.png" alt="landingpageimage">
+      </div>
+    </div>
+    <%- include('../partials/footer'); %>
+  </div>
+  <%- include('../partials/end'); %>
