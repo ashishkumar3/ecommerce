@@ -5,14 +5,15 @@ const morgan = require("morgan");
 
 const flash = require("connect-flash");
 const session = require("express-session");
-const passport = require("passport");
+const MongoDbStore = require("connect-mongodb-session")(session);
+// const passport = require("passport");
 
 // DB
 const mongoose = require("mongoose");
 
 // ROUTES
 const dashboardRoutes = require("./routes/dashboard.route");
-const loginRoutes = require("./routes/login.route");
+const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/user.route");
 const adminRoutes = require("./routes/admin.route");
 const shopRoutes = require("./routes/shop.route");
@@ -20,12 +21,21 @@ const shopRoutes = require("./routes/shop.route");
 // CONTROLLERS
 const errorController = require("./controllers/error.controller");
 
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
+  process.env.MONGO_PASSWORD
+}@cluster0-av2gk.mongodb.net/${
+  process.env.MONGO_DB
+}?retryWrites=true&w=majority`;
 // create express app.
 const app = express();
-const PORT = process.env.PORT || 3000;
+const store = new MongoDbStore({
+  uri: MONGODB_URI,
+  collection: "sessions"
+});
 
 // passport config
-require("./config/passport")(passport);
+// require("./config/passport")(passport);
 
 // serving static files.
 app.use(express.static(path.join(__dirname, "public")));
@@ -36,14 +46,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "a4f80asd71f-c87dq3-4447gd-8ed3gbe2",
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false,
+    store: store
   })
 );
 
 // passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // connect flash
 app.use(flash());
@@ -86,7 +97,7 @@ app.use((req, res, next) => {
 app.use(morgan("dev"));
 
 app.use(dashboardRoutes);
-app.use(loginRoutes);
+app.use(authRoutes);
 app.use(userRoutes);
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -107,13 +118,7 @@ app.use(errorController.get404);
 // app.use(errorController.get500);
 
 mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${
-      process.env.MONGO_PASSWORD
-    }@cluster0-av2gk.mongodb.net/${
-      process.env.MONGO_DB
-    }?retryWrites=true&w=majority`
-  )
+  .connect(MONGODB_URI)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

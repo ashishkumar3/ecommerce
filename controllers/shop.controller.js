@@ -9,7 +9,7 @@ exports.getIndexPage = (req, res, next) => {
         pageTitle: "Shop",
         path: "/",
         products: productDoc,
-        id: null
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => {
@@ -19,8 +19,16 @@ exports.getIndexPage = (req, res, next) => {
 
 // get the cart page
 exports.getCartPage = (req, res, next) => {
-  res.render("shop/cart", { pageTitle: "Cart", path: "/cart" });
+  res.render("shop/cart", {
+    pageTitle: "Cart",
+    path: "/cart",
+    isAuthenticated: req.session.isLoggedIn
+  });
 };
+
+// exports.postCartDeleteItem = (req, res, next) => {
+
+// }
 
 exports.addToCart = (req, res, next) => {
   const productId = req.body.productId;

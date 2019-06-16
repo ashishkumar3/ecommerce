@@ -1,7 +1,7 @@
-<%- include('partials/head'); %>
+<%- include('../partials/head'); %>
 </head>
 <body>
-<%- include('partials/navigation'); %>
+<%- include('../partials/navigation'); %>
   <div class="border h-screen">
     <div class="w-full text-center text-4xl text-blue-500 font-bold underline">Signup</div>
     <% if(success_msg != ''){ %>
@@ -62,7 +62,7 @@
         <div class="mt-6 text-sm text-center">Have an account? <a class="font-bold text-blue-500 hover:text-blue-800 underline" href="/login">Login</a></div>
       </form>
     </div>
-    <%- include('partials/footer'); %>
+    <%- include('../partials/footer'); %>
   </div>
   <script>
     function closeAlert(id){

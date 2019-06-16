@@ -3,22 +3,19 @@ const router = express.Router();
 
 const userController = require("../controllers/user.controller");
 
-// get the signup page
-router.get("/signup", userController.get_signup_page);
-
 // router.post("/signup-user", userController.signup_user);
 
 router.get("/users", userController.get_all_users);
 
 router.get("/get_user_by_id", userController.get_user_by_id);
 
-router.get("/logout", userController.logout);
+// router.get("/logout", userController.logout);
 
 // create a new user account
 router.post("/add-user", userController.add_user);
 
 // login a user
-router.post("/login-user", userController.login_user);
+router.post("/login-user", userController.postLogin);
 
 // PUT - update a specific learner's info by passing learner's email in the url.
 router.put("/user", userController.update_user);

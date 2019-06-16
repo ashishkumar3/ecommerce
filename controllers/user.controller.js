@@ -3,11 +3,6 @@ const bcrypt = require("bcryptjs");
 // Models
 const User = require("../models/user");
 
-// get signup page
-exports.get_signup_page = (req, res) => {
-  res.render("signup", { title: "signup", path: "/signup" });
-};
-
 // get users from db
 exports.get_all_users = (req, res) => {
   User.find()
@@ -123,19 +118,30 @@ exports.remove_user_with_id = (req, res) => {
 };
 
 // logout
-exports.logout = (req, res) => {
-  req.logout();
-  req.flash("success_msg", "You are logged out");
-  res.redirect("/login");
-};
+// exports.logout = (req, res) => {
+//   req.logout();
+//   req.flash("success_msg", "You are logged out");
+//   res.redirect("/login");
+// };
 
 //login
-exports.login_user = (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true
-  })(req, res, next);
+// exports.login_user = (req, res, next) => {
+//   passport.authenticate("local", {
+//     successRedirect: "/",
+//     failureRedirect: "/login",
+//     failureFlash: true
+//   })(req, res, next);
+// };
+
+exports.postLogin = (req, res, next) => {
+  User.findById("5d062b0d4548ce373234f542")
+    .then(user => {
+      req.session.isLoggedIn = true;
+      req.session.user = user;
+      console.log(`user with id '5d062b0d4548ce373234f542' has logged in`);
+      res.redirect("/");
+    })
+    .catch(err => console.log(err));
 };
 
 //signup

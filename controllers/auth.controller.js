@@ -1,7 +1,19 @@
 const passport = require("passport");
 
-exports.get_login = (req, res) => {
-  res.render("login", { pageTitle: "Login", id: null, path: "/login" });
+exports.getLoginPage = (req, res) => {
+  // check if user is not already logged in. if yes redirect to home else show login page
+  // console.log(req.session.isLoggedIn);
+  res.render("auth/login", {
+    pageTitle: "Login",
+    id: null,
+    path: "/login",
+    isAuthenticated: req.session.isLoggedIn
+  });
+};
+
+// get signup page
+exports.getSignupPage = (req, res) => {
+  res.render("auth/signup", { title: "signup", path: "/signup" });
 };
 
 // login a user
@@ -44,10 +56,19 @@ exports.get_login = (req, res) => {
 // };
 
 //login
-exports.login_user = (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true
-  })(req, res, next);
+// exports.login_user = (req, res, next) => {
+//   passport.authenticate("local", {
+//     successRedirect: "/",
+//     failureRedirect: "/login",
+//     failureFlash: true
+//   })(req, res, next);
+// };
+
+exports.postLogout = (req, res, next) => {
+  // clear the session
+  // console.log(req.session);
+  req.session.destroy(err => {
+    console.log(err);
+    res.redirect("/");
+  });
 };
