@@ -1,15 +1,16 @@
 const Product = require("../models/product");
 
 // render add-product-page
-exports.get_add_product_page = (req, res, next) => {
+exports.addProductPage = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
-    path: "/admin/add-product"
+    path: "/admin/add-product",
+    isAuthenticated: req.session.isLoggedIn
   });
 };
 
 // add the product to the shop database
-exports.post_add_product = (req, res, next) => {
+exports.postAddProduct = (req, res, next) => {
   if (!req.body) {
     return res.status(400).send("Request body is missing.");
   }
@@ -60,7 +61,8 @@ exports.getProducts = (req, res, next) => {
       res.status(201).render("admin/products", {
         pageTitle: "Products",
         path: "/admin/products",
-        products: productDoc
+        products: productDoc,
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => {

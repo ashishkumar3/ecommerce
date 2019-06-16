@@ -1,8 +1,13 @@
 const passport = require("passport");
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
 
 exports.getLoginPage = (req, res) => {
   // check if user is not already logged in. if yes redirect to home else show login page
   // console.log(req.session.isLoggedIn);
+  if (req.session.isLoggedIn) {
+    return res.redirect("/");
+  }
   res.render("auth/login", {
     pageTitle: "Login",
     id: null,
@@ -13,47 +18,64 @@ exports.getLoginPage = (req, res) => {
 
 // get signup page
 exports.getSignupPage = (req, res) => {
-  res.render("auth/signup", { title: "signup", path: "/signup" });
+  if (req.session.isLoggedIn) {
+    return res.redirect("/");
+  }
+  res.render("auth/signup", {
+    title: "signup",
+    path: "/signup",
+    isAuthenticated: req.session.isLoggedIn
+  });
 };
 
 // login a user
-// exports.login_user = (req, res) => {
-//   User.findOne({ email: req.body.email })
-//     .then(user => {
-//       if (!user) {
-//         return res.status(401).json({
-//           message: "Authentication Failed!"
-//         });
-//       }
+exports.postLoginUser = (req, res, next) => {
+  let { email, password } = req.body;
 
-//       bcrypt.compare(req.body.password, user.password, (err, result) => {
-//         if (err) {
-//           return res.status(401).json({
-//             message: "Authentication Failed!"
-//           });
-//         }
-//         if (result) {
-//           const token = jwt.sign(
-//             { email: user.email, id: user._id },
-//             process.env.JWT_KEY,
-//             {
-//               expiresIn: "1h"
-//             }
-//           );
-//           res.status(200).json({
-//             message: "Authentication Successful.",
-//             token: token
-//           });
-//         }
-//         res.status(401).json({
-//           message: "Authentication Failed!"
-//         });
-//       });
-//     })
-//     .catch(err => {
-//       res.status(500).json(err);
-//     });
-// };
+  // console.log(req.body);
+
+  let errors = [];
+  // form validations
+  if (!email || !password) {
+    errors.push({ msg: "Please fill in all the fields" });
+    return res.status(409).render("auth/login", {
+      errors: errors,
+      path: "/login",
+      isAuthenticated: false
+    });
+  }
+  // console.log(email, password);
+  User.findOne({ email: email })
+    .then(user => {
+      // console.log(user, "usererrrr");
+      if (!user) {
+        errors.push({ msg: "Authentication Failed!" });
+        return res.status(409).render("auth/login", {
+          errors: errors,
+          path: "/login",
+          isAuthenticated: req.session.isLoggedIn
+        });
+      }
+
+      bcrypt.compare(password, user.password).then(doMatch => {
+        if (doMatch) {
+          // console.log(doMatch, "match hua kya?");
+          // create a session
+          req.session.isLoggedIn = true;
+          req.session.user = user;
+          return res.status(200).redirect("/");
+        }
+        res.status(409).render("auth/login", {
+          errors: errors,
+          path: "/login",
+          isAuthenticated: false
+        });
+      });
+    })
+    .catch(err => {
+      res.status(500).send("bhag bc");
+    });
+};
 
 //login
 // exports.login_user = (req, res, next) => {

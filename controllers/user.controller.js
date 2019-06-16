@@ -26,9 +26,11 @@ exports.add_user = (req, res) => {
   // form validations
   if (!name || !email || !password) {
     errors.push({ msg: "Please fill in all the fields" });
-    return res
-      .status(409)
-      .render("signup", { errors: errors, path: "/signup" });
+    return res.status(409).render("auth/signup", {
+      errors: errors,
+      path: "/signup",
+      isAuthenticated: req.session.isLoggedIn
+    });
   }
 
   if (password.length < 6) {
@@ -38,9 +40,11 @@ exports.add_user = (req, res) => {
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       errors.push({ msg: "Email already exists!" });
-      return res
-        .status(409)
-        .render("signup", { errors: errors, path: "/signup" });
+      return res.status(409).render("auth/signup", {
+        errors: errors,
+        path: "/signup",
+        isAuthenticated: req.session.isLoggedIn
+      });
     }
 
     bcrypt.hash(req.body.password, 13, (err, hash) => {
@@ -133,16 +137,20 @@ exports.remove_user_with_id = (req, res) => {
 //   })(req, res, next);
 // };
 
-exports.postLogin = (req, res, next) => {
-  User.findById("5d062b0d4548ce373234f542")
-    .then(user => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-      console.log(`user with id '5d062b0d4548ce373234f542' has logged in`);
-      res.redirect("/");
-    })
-    .catch(err => console.log(err));
-};
+// exports.postLogin = (req, res, next) => {
+//   User.findById("5d062b0d4548ce373234f542")
+//     .then(user => {
+//       req.session.isLoggedIn = true;
+//       req.session.user = user;
+//       req.session.save(err => {
+//         if (err) {
+//           console.log(err);
+//         }
+//         res.redirect("/");
+//       });
+//     })
+//     .catch(err => console.log(err));
+// };
 
 //signup
 // exports.signup_user = (req, res, next) => {

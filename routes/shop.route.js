@@ -2,21 +2,23 @@ const express = require("express");
 const router = express.Router();
 
 const shopController = require("../controllers/shop.controller");
+const isAuthenticated = require("../middleware/is-auth");
 
 router.get("/", shopController.getIndexPage);
 
 // router.get('/products');
-router.get("/cart", shopController.getCartPage);
+router.get("/cart", isAuthenticated, shopController.getCartPage);
 
-router.post("/cart", shopController.addToCart);
+router.post("/cart", isAuthenticated, shopController.addToCart);
 
-router.get("/checkout", shopController.getCheckoutPage);
+router.get("/checkout", isAuthenticated, shopController.getCheckoutPage);
 
-router.get("/orders", shopController.getOrdersPage);
+router.get("/orders", isAuthenticated, shopController.getOrdersPage);
 
 // get about page
 router.get("/about", shopController.getAboutPage);
 
+// check product details
 router.get("/product/:productId", shopController.getProductById);
 
 // router.post('/cart-delete-item');
