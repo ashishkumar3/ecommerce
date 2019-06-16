@@ -21,12 +21,14 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  orderedItems: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Item"
-    }
-  ]
+  cart: {
+    items: [
+      {
+        productId: { type: Schema.Types.ObjectId, required: true },
+        quantity: { type: Number, required: true }
+      }
+    ]
+  }
 });
 
 // Create model of the user schema
