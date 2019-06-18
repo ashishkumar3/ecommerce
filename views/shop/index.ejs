@@ -1,15 +1,20 @@
 <%- include('../partials/head'); %>
+<style>
+  .product-container{
+    flex: 1 1 auto;
+  }
+</style>
 </head>
 <body>
 <%- include('../partials/navigation'); %>
-
-
 <%- include('../partials/sliding-navigation'); %>
-  <div class="flex flex-col">
-    <% products.forEach(product => { %>
-      <div class="md:w-1/5 m-2">
-      <a href="/product/<%= product.id %>">
-        <div class="rounded overflow-hidden shadow-lg">
+
+  <div class="main flex border justify-center">
+    <div class="product-container flex flex-col border md:flex-row">
+      <% products.forEach(product => { %>
+      <div class=" md:w-1/5 m-2 inline-block">
+        <a href="/product/<%= product.id %>">
+        <div class="rounded overflow-hidden shadow-xl">
           <img class="" src="<%= product.imageUrl %>" alt="<%= product.name %>">
           <div class="px-6 py-2">
             <div class="font-bold text-xl mb-2"><%= product.name %></div>
@@ -21,9 +26,10 @@
             <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"><%= product.description %></span>
           </div>
         </div>
-      </a>
+        </a>
+      </div>
+      <% }) %>
     </div>
-    <% }) %>
-    <%- include('../partials/footer'); %>
   </div>
+    <%- include('../partials/footer'); %>
   <%- include('../partials/end'); %>

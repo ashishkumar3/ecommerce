@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const flash = require("connect-flash");
 const session = require("express-session");
 const MongoDbStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
 // const passport = require("passport");
 
 // DB
@@ -52,6 +53,9 @@ app.use(
   })
 );
 
+// csrf
+app.use(csrf());
+
 // passport middleware
 // app.use(passport.initialize());
 // app.use(passport.session());
@@ -95,6 +99,13 @@ app.use((req, res, next) => {
 });
 
 app.use(morgan("dev"));
+
+// csrf, isauth
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 app.use(dashboardRoutes);
 app.use(authRoutes);

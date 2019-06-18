@@ -9,7 +9,8 @@ exports.getIndexPage = (req, res, next) => {
         pageTitle: "Shop",
         path: "/",
         products: productDoc,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        csrfToken: req.csrfToken()
       });
     })
     .catch(err => {
