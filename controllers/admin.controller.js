@@ -1,7 +1,11 @@
 const Product = require("../models/product");
 
-// render add-product-page
+/*
+ ************************GET ADD PRODUCT PAGE*************************
+ */
+
 exports.addProductPage = (req, res, next) => {
+  console.log(req.session.user._id);
   res.render("admin/add-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
@@ -9,7 +13,10 @@ exports.addProductPage = (req, res, next) => {
   });
 };
 
-// add the product to the shop database
+/*
+ ************************ADD THE PRODUCT TO THE SHOP AS SELLER*************************
+ */
+
 exports.postAddProduct = (req, res, next) => {
   if (!req.body) {
     return res.status(400).send("Request body is missing.");
@@ -34,7 +41,8 @@ exports.postAddProduct = (req, res, next) => {
     name: name,
     description: description,
     price: price,
-    imageUrl: imageUrl
+    imageUrl: imageUrl,
+    userId: req.session.user._id
   });
 
   product
@@ -54,21 +62,32 @@ exports.postAddProduct = (req, res, next) => {
     });
 };
 
-// get all products from the shop database
+/*
+ ************************GET ALL ADMIN PRODUCTS PAGE*************************
+ */
+
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  // show only those products which are added by the logged in user.
+  // const userId = req.session.user._id;
+
+  Product.find({ userId: req.session.user._id })
     .then(productDoc => {
+      console.log(productDoc);
+      console.log(typeof req.session.user._id);
       res.status(201).render("admin/products", {
         pageTitle: "Products",
         path: "/admin/products",
-        products: productDoc,
-        isAuthenticated: req.session.isLoggedIn
+        products: productDoc
       });
     })
     .catch(err => {
       console.log(err);
     });
 };
+
+/*
+ ************************GET EDIT PRODUCT PAGE*************************
+ */
 
 exports.editProduct = (req, res, next) => {
   const productId = req.params.productId;
@@ -84,6 +103,10 @@ exports.editProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+/*
+ ************************POST EDIT A PRODUCT*************************
+ */
+
 exports.updateProduct = (req, res, next) => {
   const id = req.body.productId;
   const updatedName = req.body.name;
@@ -91,24 +114,27 @@ exports.updateProduct = (req, res, next) => {
   const updatedDescription = req.body.description;
   const updatedImageUrl = req.body.imageUrl;
 
-  Product.findOneAndUpdate(
-    { _id: id },
-    {
-      name: updatedName,
-      price: updatedPrice,
-      description: updatedDescription,
-      imageUrl: updatedImageUrl
-    },
-    { new: true }
-  )
+  Product.findById(id)
     .then(product => {
-      console.log("updated product", product);
+      if (product.userId.toString() !== req.session.user._id.toString()) {
+        return res.redirect("/");
+      }
+      product.name = updatedName;
+      product.price = updatedPrice;
+      product.description = updatedDescription;
+      product.imageUrl = updatedImageUrl;
+      return product.save();
+    })
+    .then(result => {
       res.redirect("/admin/products");
     })
     .catch(err => console.log(err));
 };
 
-// delete a product
+/*
+ ************************DELETE A PRODUCT*************************
+ */
+
 exports.deleteProductById = (req, res) => {
   if (!req.body.productId) {
     return res.status(400).send("Missing body parameter: productId");
@@ -117,19 +143,12 @@ exports.deleteProductById = (req, res) => {
   let _id = req.body.productId;
   console.log(_id);
 
-  Product.findOne({ _id: _id }).then(product => {
-    if (!product) {
-      return res.status(409).json({
-        message: "Cannot find this product"
-      });
-    }
-    Product.findByIdAndDelete(_id)
-      .then(doc => {
-        console.log(`Product with id ${_id} deleted from db.`);
-        res.status(200).redirect("/admin/products");
-      })
-      .catch(err => {
-        res.status(500).json(err);
-      });
-  });
+  Product.deleteOne({ _id: _id, userId: req.session.user._id })
+    .then(doc => {
+      console.log(`Product with id ${_id} deleted from db.`);
+      res.status(200).redirect("/admin/products");
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
 };

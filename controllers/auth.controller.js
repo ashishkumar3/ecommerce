@@ -142,6 +142,7 @@ exports.postLoginUser = (req, res, next) => {
           req.session.user = user;
           return res.status(200).redirect("/");
         }
+        errors.push({ msg: "Email/password incorrect." });
         res.status(409).render("auth/login", {
           errors: errors,
           path: "/login"
@@ -237,6 +238,9 @@ exports.getNewPasswordPage = (req, res, next) => {
   })
     .then(user => {
       console.log(user);
+      if (!user) {
+        res.redirect("/");
+      }
       res.render("auth/new-password", {
         path: "/new-password",
         pageTitle: "New Password",

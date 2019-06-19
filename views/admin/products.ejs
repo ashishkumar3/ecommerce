@@ -3,10 +3,10 @@
 <body>
   <%- include('../partials/navigation') %>
   <%- include('../partials/sliding-navigation') %>
-  <div class="products border md:w-3/5 md:mx-auto">
+  <div class="products border md:mx-auto">
     <h1 class="text-6xl font-bold text-blue-500">Your Products</h1>
     <% products.forEach(product => { %>
-      <div class="">
+      <div class="my-4">
         <div class="rounded overflow-hidden shadow-lg md:flex justify-between">
           <img class="" src="<%= product.imageUrl %>" alt="<%= product.name %>" height="150">
           <div class="flex flex-col">
@@ -23,7 +23,7 @@
             </div>
             <div class="px-6 py-2 flex">
               <div class="px-6 py-2">
-                <form action="/admin/edit-product/<%= product.id %>" method="POST">
+                <form action="/admin/edit-product/<%= product.id %>" method="GET">
                   <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
                     <i class="fas fa-edit"></i> Edit
                   </button>

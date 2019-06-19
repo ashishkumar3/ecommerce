@@ -18,6 +18,10 @@ const productSchema = new Schema({
   imageUrl: {
     type: String,
     required: true
+  },
+  userId: {
+    type: String,
+    required: true
   }
 });
 
