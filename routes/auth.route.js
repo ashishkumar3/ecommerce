@@ -17,4 +17,16 @@ router.post("/add-user", authController.add_user);
 //logout
 router.post("/logout", authController.postLogout);
 
+// get the reset password page
+router.get("/reset-password", authController.getResetPasswordPage);
+
+// reset password post req
+router.post("/reset-password", authController.postResetPassword);
+
+// reset password with token on param
+router.get("/reset-password/:token", authController.getNewPasswordPage);
+
+// reset password to new password
+router.post("/new-password", authController.postNewPassword);
+
 module.exports = router;

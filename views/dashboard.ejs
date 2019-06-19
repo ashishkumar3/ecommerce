@@ -1,11 +1,17 @@
 <%- include('partials/head'); %>
 </head>
 <body>
-    <%- include('partials/navigation'); %>
-<h1><%= title %></h1>
-<ul>
-  <li><%= id %></li>
-  <li><%= username %></li>
-  <li><a href="/logout">logout</a></li>
-</ul>
+  <%- include('partials/navigation'); %>
+  <h1><%= title %></h1>
 
+  <%= isAuthenticated %> <br>
+  Username: <%= user.name %><br>
+
+  <div class="border w-1/5">
+    <a href="admin/add-product" class="underline text-blue-500">Add Product</a> <br>
+    <a href="admin/products" class="underline text-blue-500">Products</a>
+  </div>
+
+
+<%- include('partials/footer'); %>
+<%- include('partials/end'); %>
