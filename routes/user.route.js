@@ -13,9 +13,6 @@ router.get("/get_user_by_id", userController.get_user_by_id);
 
 // router.get("/logout", userController.logout);
 
-// create a new user account
-router.post("/add-user", userController.add_user);
-
 // login a user
 // router.post("/login-user", authController.postLoginUser);
 

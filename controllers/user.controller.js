@@ -1,5 +1,3 @@
-const passport = require("passport");
-const bcrypt = require("bcryptjs");
 // Models
 const User = require("../models/user");
 
@@ -12,68 +10,6 @@ exports.get_all_users = (req, res) => {
     .catch(err => {
       console.log(err);
     });
-};
-
-// add a new user to db
-exports.add_user = (req, res) => {
-  if (!req.body) {
-    return res.status(400).send("Request body is missing");
-  }
-
-  let { name, email, password } = req.body;
-
-  let errors = [];
-  // form validations
-  if (!name || !email || !password) {
-    errors.push({ msg: "Please fill in all the fields" });
-    return res.status(409).render("auth/signup", {
-      errors: errors,
-      path: "/signup",
-      isAuthenticated: req.session.isLoggedIn
-    });
-  }
-
-  if (password.length < 6) {
-    errors.push({ msg: "Password must be atleast 6 characters" });
-  }
-
-  User.findOne({ email: req.body.email }).then(user => {
-    if (user) {
-      errors.push({ msg: "Email already exists!" });
-      return res.status(409).render("auth/signup", {
-        errors: errors,
-        path: "/signup",
-        isAuthenticated: req.session.isLoggedIn
-      });
-    }
-
-    bcrypt.hash(req.body.password, 13, (err, hash) => {
-      if (err) {
-        return res.status(500).json({
-          error: err
-        });
-      }
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash
-      });
-      newUser
-        .save()
-        .then(doc => {
-          if (!doc || doc.length === 0) {
-            return res.status(500).send(doc);
-          }
-          req.flash("success_msg", "You are now registered and can log in.");
-          res.status(201).redirect("/login");
-          console.log(`User added to db: ${doc}`);
-        })
-        .catch(err => {
-          res.status(500).json(err);
-          console.log(err);
-        });
-    });
-  });
 };
 
 exports.get_user_by_id = (req, res) => {
