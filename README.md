@@ -1,4 +1,4 @@
-# Restaurant Application
+# Ecommerce Website Application
 
 ### install
 ```bash
