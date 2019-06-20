@@ -4,6 +4,8 @@ const router = express.Router();
 const adminController = require("../controllers/admin.controller");
 const isAuthenticated = require("../middleware/is-auth");
 
+const { check } = require("express-validator/check");
+
 // /admin/add-product
 router.get("/add-product", isAuthenticated, adminController.addProductPage);
 

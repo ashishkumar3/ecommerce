@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
+const User = require("../models/user");
+
 const authController = require("../controllers/auth.controller");
+
+const { check, body } = require("express-validator");
 
 // get the login page
 router.get("/login", authController.getLoginPage);
@@ -12,7 +16,34 @@ router.post("/login-user", authController.postLoginUser);
 router.get("/signup", authController.getSignupPage);
 
 // create a new user account
-router.post("/add-user", authController.add_user);
+router.post(
+  "/signup",
+  [
+    check("name").trim(),
+    check("email")
+      .trim()
+      .normalizeEmail()
+      .isEmail()
+      .withMessage("Please enter a valid email address")
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then(user => {
+          if (user) {
+            return Promise.reject("Email address already registered!");
+          }
+        });
+      }),
+    check("password")
+      .isLength({ min: 6 })
+      .withMessage("Password should be atleast 6 characters long."),
+    check("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match!");
+      }
+      return true;
+    })
+  ],
+  authController.postSignupUser
+);
 
 //logout
 router.post("/logout", authController.postLogout);

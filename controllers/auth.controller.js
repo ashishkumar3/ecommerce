@@ -6,6 +6,9 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 
+// form validation
+const { validationResult } = require("express-validator/check");
+
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
@@ -38,75 +41,76 @@ exports.getSignupPage = (req, res) => {
   }
   res.render("auth/signup", {
     title: "signup",
-    path: "/signup"
+    path: "/signup",
+    oldInputs: {
+      email: "",
+      name: ""
+    }
   });
 };
 
 /*
  *********************SIGNING UP A USER***************************
  */
-exports.add_user = (req, res) => {
-  if (!req.body) {
-    return res.status(400).send("Request body is missing");
-  }
-
+exports.postSignupUser = (req, res) => {
   let { name, email, password } = req.body;
 
-  let errors = [];
-  // form validations
-  if (!name || !email || !password) {
-    errors.push({ msg: "Please fill in all the fields" });
-    return res.status(409).render("auth/signup", {
-      errors: errors,
-      path: "/signup"
+  // let errors = [];
+  // // form validations
+  // if (!name || !email || !password) {
+  //   errors.push({ msg: "Please fill in all the fields" });
+  // return res.status(409).render("auth/signup", {
+  //   errors: errors,
+  //   path: "/signup"
+  // });
+  // }
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render("auth/signup", {
+      errors: errors.array(),
+      path: "/signup",
+      pageTitle: "Signup",
+      oldInputs: {
+        email: email,
+        name: name
+      }
     });
   }
 
-  if (password.length < 6) {
-    errors.push({ msg: "Password must be atleast 6 characters" });
-  }
-
-  User.findOne({ email: req.body.email }).then(user => {
-    if (user) {
-      errors.push({ msg: "Email already exists!" });
-      return res.status(409).render("auth/signup", {
-        errors: errors,
-        path: "/signup"
+  bcrypt.hash(password, 13, (err, hash) => {
+    if (err) {
+      return res.status(500).json({
+        error: err
       });
     }
-
-    bcrypt.hash(req.body.password, 13, (err, hash) => {
-      if (err) {
-        return res.status(500).json({
-          error: err
-        });
-      }
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash
-      });
-      newUser
-        .save()
-        .then(doc => {
-          if (!doc || doc.length === 0) {
-            return res.status(500).send(doc);
-          }
-          req.flash("success_msg", "You are now registered and can log in.");
-          res.status(201).redirect("/login");
-          console.log(`User added to db: ${doc}`);
-          return transporter.sendMail({
-            to: email,
-            from: "ashish@shop.com",
-            subject: "Signup successful",
-            html: "<h1>You signed up successfully</h1>"
-          });
-        })
-        .catch(err => {
-          res.status(500).json(err);
-          console.log(err);
-        });
+    const newUser = new User({
+      name: name,
+      email: email,
+      password: hash
     });
+    newUser
+      .save()
+      .then(doc => {
+        if (!doc || doc.length === 0) {
+          return res.status(500).send(doc);
+        }
+        req.flash("success_msg", "You are now registered and can log in.");
+        res.status(201).redirect("/login");
+        console.log(`User added to db: ${doc}`);
+        return transporter.sendMail({
+          to: email,
+          from: "ashish@shop.com",
+          subject: "Signup successful",
+          html: "<h1>You signed up successfully</h1>"
+        });
+      })
+      .catch(err => {
+        res.status(500).json(err);
+        console.log(err);
+      });
   });
 };
 
