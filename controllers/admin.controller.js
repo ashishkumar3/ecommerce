@@ -23,11 +23,21 @@ exports.postAddProduct = (req, res, next) => {
     return res.status(400).send("Request body is missing.");
   }
 
-  let { name, price, description, imageUrl } = req.body;
+  let { name, price, description } = req.body;
 
   let image = req.file;
 
-  console.log(req.body);
+  if (!image) {
+    req.flash("error", "File should be an image");
+    return res.status(422).render("admin/add-product", {
+      pageTitle: "Add Product",
+      path: "/admin/add-product",
+      isAuthenticated: req.session.isLoggedIn,
+      user: req.user
+    });
+  }
+
+  console.log(image);
 
   let errors = [];
 
