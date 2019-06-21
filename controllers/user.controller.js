@@ -8,13 +8,19 @@ exports.get_all_users = (req, res) => {
       res.status(201).send(doc);
     })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
 exports.get_user_by_id = (req, res) => {
   User.findById(req.user.id, (err, doc) => {
-    if (err) res.status(500).json(err);
+    if (err) {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    }
     if (doc) {
       return res.status(201).json(doc);
     }
@@ -30,7 +36,9 @@ exports.update_user = (req, res) => {
       res.json(doc);
     })
     .catch(err => {
-      res.status(500).json(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -52,47 +60,9 @@ exports.remove_user_with_id = (req, res) => {
         });
       })
       .catch(err => {
-        res.status(500).json(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   });
 };
-
-// logout
-// exports.logout = (req, res) => {
-//   req.logout();
-//   req.flash("success_msg", "You are logged out");
-//   res.redirect("/login");
-// };
-
-//login
-// exports.login_user = (req, res, next) => {
-//   passport.authenticate("local", {
-//     successRedirect: "/",
-//     failureRedirect: "/login",
-//     failureFlash: true
-//   })(req, res, next);
-// };
-
-// exports.postLogin = (req, res, next) => {
-//   User.findById("5d062b0d4548ce373234f542")
-//     .then(user => {
-//       req.session.isLoggedIn = true;
-//       req.session.user = user;
-//       req.session.save(err => {
-//         if (err) {
-//           console.log(err);
-//         }
-//         res.redirect("/");
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
-
-//signup
-// exports.signup_user = (req, res, next) => {
-//   passport.authenticate("local", {
-//     successRedirect: "/login",
-//     failureRedirect: "/signup",
-//     failureFlash: true
-//   })(req, res, next);
-// };

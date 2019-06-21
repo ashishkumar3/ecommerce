@@ -6,7 +6,7 @@ exports.get_dashboard = (req, res) => {
     pageTitle: "Dashboard",
     path: "/dashboard",
     email: req.session.user.email,
-    user: req.session.user
+    user: req.user
   });
 };
 
@@ -15,6 +15,6 @@ exports.getAccountPage = (req, res, next) => {
     pageTitle: "Account",
     path: "/account",
     email: req.session.user.email,
-    user: req.session.user
+    user: req.user
   });
 };

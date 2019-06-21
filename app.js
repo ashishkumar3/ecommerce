@@ -11,6 +11,7 @@ const csrf = require("csurf");
 
 // DB
 const mongoose = require("mongoose");
+const User = require("./models/user");
 
 // ROUTES
 const dashboardRoutes = require("./routes/dashboard.route");
@@ -66,6 +67,26 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+
+  User.findById(req.session.user._id)
+    .then(user => {
+      if (!user) {
+        return next();
+      }
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatsCode = 500;
+      return next(error);
+    });
+});
+
 // app.use((req, res, next) => {
 
 // });
@@ -118,7 +139,7 @@ app.get("/pricing", (req, res) => {
 app.use(errorController.get404);
 
 // error 500 internal server error
-// app.use(errorController.get500);
+app.use(errorController.get500);
 
 mongoose
   .connect(MONGODB_URI)

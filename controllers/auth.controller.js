@@ -55,16 +55,6 @@ exports.getSignupPage = (req, res) => {
 exports.postSignupUser = (req, res) => {
   let { name, email, password } = req.body;
 
-  // let errors = [];
-  // // form validations
-  // if (!name || !email || !password) {
-  //   errors.push({ msg: "Please fill in all the fields" });
-  // return res.status(409).render("auth/signup", {
-  //   errors: errors,
-  //   path: "/signup"
-  // });
-  // }
-
   let errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -108,8 +98,9 @@ exports.postSignupUser = (req, res) => {
         });
       })
       .catch(err => {
-        res.status(500).json(err);
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   });
 };
@@ -154,7 +145,9 @@ exports.postLoginUser = (req, res, next) => {
       });
     })
     .catch(err => {
-      res.status(500).json(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -222,8 +215,9 @@ exports.postResetPassword = (req, res, next) => {
         });
       })
       .catch(err => {
-        console.log(err);
-        res.json(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   });
 };
@@ -253,8 +247,9 @@ exports.getNewPasswordPage = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log(err);
-      res.json(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -292,6 +287,8 @@ exports.postNewPassword = (req, res, next) => {
       console.log(`Password changed for user ${result}`);
     })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };

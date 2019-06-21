@@ -9,7 +9,8 @@ exports.addProductPage = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
-    isAuthenticated: req.session.isLoggedIn
+    isAuthenticated: req.session.isLoggedIn,
+    user: req.user
   });
 };
 
@@ -27,15 +28,6 @@ exports.postAddProduct = (req, res, next) => {
   console.log(req.body);
 
   let errors = [];
-  // form validations
-  // if (!name || !price || !description || imageUrl) {
-  //   errors.push({ msg: "Please fill in all the fields" });
-  //   console.log("fields not filled.");
-  //   return res.status(409).render("admin/add-product", {
-  //     errors: errors,
-  //     path: "/admin/add-product"
-  //   });
-  // }
 
   const product = new Product({
     name: name,
@@ -57,8 +49,9 @@ exports.postAddProduct = (req, res, next) => {
       res.status(201).redirect("/");
     })
     .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -81,7 +74,9 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -100,7 +95,11 @@ exports.editProduct = (req, res, next) => {
         product: product
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 /*
@@ -128,7 +127,11 @@ exports.updateProduct = (req, res, next) => {
     .then(result => {
       res.redirect("/admin/products");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 /*
@@ -149,6 +152,8 @@ exports.deleteProductById = (req, res) => {
       res.status(200).redirect("/admin/products");
     })
     .catch(err => {
-      res.status(500).json(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
