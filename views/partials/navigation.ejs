@@ -4,11 +4,11 @@
       <div class="md:hidden flex">
         <i class="fas fa-bars my-3 mx-2 py-2 text-3xl text-blue-500 " onclick="openNav()"></i>
       </div>
-      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 md:mx-1 my-4 md:my-3 rounded">
+      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4 md:mx-1 md:my-3 ">
         Company
       </a>
       <% if(isAuthenticated){ %>
-        <a href="/cart" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 md:mx-1 my-4 md:my-3 rounded">
+        <a href="/cart" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded md:mx-1 md:my-3 md:hidden">
           Cart
         </a>
       <% } %>
@@ -22,7 +22,7 @@
       </button>
     </form>
   </div>
-  <div class="md:flex md:flex-row hidden">
+  <div class="md:flex md:flex-row hidden md:hidden">
     <% if(!isAuthenticated && path !== '/login'){ %>
     <a href="/login" class="text-white text-center bg-blue-500 hover:bg-blue-700 px-4 py-2 my-3 mx-1 font-bold rounded">
       Login

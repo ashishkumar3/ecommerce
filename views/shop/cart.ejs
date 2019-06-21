@@ -3,8 +3,13 @@
 <body>
 <%- include('../partials/navigation'); %>
 <%- include('../partials/sliding-navigation'); %>
-<div class="max-w-sm w-full lg:max-w-full lg:flex">
-  <div class="border border-gray-400 lg:border-l lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal border border-gray-400 mx-auto md:w-1/2">
+
+<div class="main flex border justify-center">
+  <%- include('../partials/sidemenu'); %>
+  <div class="md:w-5/6">
+    <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
+    <div class="border">
+      <div class="border border-gray-400 lg:border-l lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal border border-gray-400 mx-auto md:w-1/2">
     <div class="mb-8">
       <div class="text-gray-900 font-bold text-xl mb-2">Product Name</div>
       <p class="text-gray-700 text-base">Product Quantity</p>
@@ -20,6 +25,8 @@
         Remove
       </button>
       </div>
+  </div>
+    </div>
   </div>
 </div>
 <%- include('../partials/footer'); %>

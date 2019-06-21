@@ -1,0 +1,32 @@
+<div class="hidden md:flex flex-col w-1/6 border my-8">
+  <div class="mx-auto">
+    <% if(isAuthenticated){ %>
+      <img src="/img/portrait.jpeg" alt="" class="user-avatar" width="150" height="150">
+      <div class="text-center"><%= user.name %></div>
+    <%} %>
+  </div>
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow bg-red-200">
+    <a href="/"><i class="fas fa-home"></i> Home</a>
+  </div>
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-indigo-300">
+    <a href="/dashboard"><i class="fas fa-cog"></i> Dashboard</a>
+  </div>
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-blue-300">
+    <a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a>
+  </div>
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-green-300">
+    <a href="/account"><i class="fas fa-user"></i> Account</a>
+  </div>
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-yellow-300">
+    <% if(isAuthenticated) {%>
+      <form action="/logout" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="font-bold">
+          <i class="fas fa-power-off"></i> Logout
+        </button>
+      </form>
+    <%} else {%>
+      <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <%}%>
+  </div>
+</div>

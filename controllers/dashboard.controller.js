@@ -3,8 +3,18 @@ const User = require("../models/user");
 exports.get_dashboard = (req, res) => {
   console.log(req.session);
   res.render("dashboard", {
-    title: "Dashboard",
+    pageTitle: "Dashboard",
     path: "/dashboard",
-    email: req.session.user.email
+    email: req.session.user.email,
+    user: req.session.user
+  });
+};
+
+exports.getAccountPage = (req, res, next) => {
+  res.render("account", {
+    pageTitle: "Account",
+    path: "/account",
+    email: req.session.user.email,
+    user: req.session.user
   });
 };

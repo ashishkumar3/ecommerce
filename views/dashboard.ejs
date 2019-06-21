@@ -2,15 +2,18 @@
 </head>
 <body>
   <%- include('partials/navigation'); %>
-  <h1><%= title %></h1>
+
+  <div class="main flex border justify-center">
+    <%- include('partials/sidemenu'); %>
+    <div class="md:w-5/6">
+      <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
+      <div class="border w-1/5">
+        <a href="admin/add-product" class="underline text-blue-500">Add Product</a> <br>
+        <a href="admin/products" class="underline text-blue-500">Products</a>
+      </div>
+    </div>
+  </div>
 
   <%= isAuthenticated %> <br>
   Email: <%= email %><br>
-
-  <div class="border w-1/5">
-    <a href="admin/add-product" class="underline text-blue-500">Add Product</a> <br>
-    <a href="admin/products" class="underline text-blue-500">Products</a>
-  </div>
-
-<%- include('partials/footer'); %>
 <%- include('partials/end'); %>

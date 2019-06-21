@@ -3,6 +3,13 @@ const Product = require("../models/product");
 
 // get the index page
 exports.getIndexPage = (req, res, next) => {
+  let user;
+  if (req.session.isLoggedIn) {
+    user = req.session.user;
+  } else {
+    user = "";
+  }
+
   Product.find()
     .then(productDoc => {
       res.status(201).render("shop/index", {
@@ -10,7 +17,8 @@ exports.getIndexPage = (req, res, next) => {
         path: "/",
         products: productDoc,
         isAuthenticated: req.session.isLoggedIn,
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
+        user: user
       });
     })
     .catch(err => {
@@ -23,7 +31,8 @@ exports.getCartPage = (req, res, next) => {
   res.render("shop/cart", {
     pageTitle: "Cart",
     path: "/cart",
-    isAuthenticated: req.session.isLoggedIn
+    isAuthenticated: req.session.isLoggedIn,
+    user: req.session.user
   });
 };
 
@@ -60,7 +69,8 @@ exports.getProductById = (req, res, next) => {
         pageTitle: "Product Details",
         path: "/shop/product-details",
         product: product,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        user: req.session.user
       });
     })
     .catch(err => {
