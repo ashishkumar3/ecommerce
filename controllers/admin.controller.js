@@ -5,8 +5,8 @@ const Product = require("../models/product");
  */
 
 exports.addProductPage = (req, res, next) => {
-  console.log(req.session.user._id);
-  res.render("admin/add-product", {
+  console.log(req.user._id);
+  res.status(200).render("admin/add-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     isAuthenticated: req.session.isLoggedIn,
@@ -25,6 +25,8 @@ exports.postAddProduct = (req, res, next) => {
 
   let { name, price, description, imageUrl } = req.body;
 
+  let image = req.file;
+
   console.log(req.body);
 
   let errors = [];
@@ -33,8 +35,8 @@ exports.postAddProduct = (req, res, next) => {
     name: name,
     description: description,
     price: price,
-    imageUrl: imageUrl,
-    userId: req.session.user._id
+    imageUrl: image,
+    userId: req.user._id
   });
 
   product
@@ -49,6 +51,7 @@ exports.postAddProduct = (req, res, next) => {
       res.status(201).redirect("/");
     })
     .catch(err => {
+      console.log("err", err);
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -70,10 +73,12 @@ exports.getProducts = (req, res, next) => {
       res.status(201).render("admin/products", {
         pageTitle: "Products",
         path: "/admin/products",
-        products: productDoc
+        products: productDoc,
+        user: req.user
       });
     })
     .catch(err => {
+      console.log(err, "err");
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -92,10 +97,12 @@ exports.editProduct = (req, res, next) => {
       res.render("admin/edit-product", {
         pageTitle: "Edit Product",
         path: "/admin/edit-product",
-        product: product
+        product: product,
+        user: req.user
       });
     })
     .catch(err => {
+      console.log(err, "err");
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -112,6 +119,8 @@ exports.updateProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
   const updatedImageUrl = req.body.imageUrl;
+  // const updatedImageUrl = req.file;
+  console.log(updatedImageUrl);
 
   Product.findById(id)
     .then(product => {
@@ -128,6 +137,7 @@ exports.updateProduct = (req, res, next) => {
       res.redirect("/admin/products");
     })
     .catch(err => {
+      console.log("err", err);
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
@@ -152,6 +162,7 @@ exports.deleteProductById = (req, res) => {
       res.status(200).redirect("/admin/products");
     })
     .catch(err => {
+      console.log("err", err);
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);

@@ -64,7 +64,8 @@ exports.getProductById = (req, res, next) => {
         pageTitle: "Product Details",
         path: "/shop/product-details",
         product: product,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        user: req.user
       });
     })
     .catch(err => {

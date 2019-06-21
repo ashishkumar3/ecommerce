@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const morgan = require("morgan");
+const multer = require("multer");
 
 const flash = require("connect-flash");
 const session = require("express-session");
@@ -36,10 +37,20 @@ const store = new MongoDbStore({
   collection: "sessions"
 });
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  }
+});
+
 // serving static files.
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ storage: fileStorage }).single("image"));
 
 // express session
 app.use(
@@ -56,17 +67,6 @@ app.use(csrf());
 // connect flash
 app.use(flash());
 
-// global vars
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash("success_msg");
-  res.locals.error_msg = req.flash("error_msg");
-  res.locals.error = req.flash("error");
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  // res.locals.user = req.session.user;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
-
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -81,10 +81,22 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => {
+      console.log("err", err);
       const error = new Error(err);
       error.httpStatsCode = 500;
       return next(error);
     });
+});
+
+// global vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  // res.locals.user = req.session.user;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 // app.use((req, res, next) => {
@@ -139,7 +151,7 @@ app.get("/pricing", (req, res) => {
 app.use(errorController.get404);
 
 // error 500 internal server error
-app.use(errorController.get500);
+// app.use(errorController.get500);
 
 mongoose
   .connect(MONGODB_URI)
