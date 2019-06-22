@@ -11,6 +11,12 @@ router.get("/cart", isAuthenticated, shopController.getCartPage);
 
 router.post("/cart", isAuthenticated, shopController.addToCart);
 
+router.post(
+  "/delete-from-cart",
+  isAuthenticated,
+  shopController.postDeleteCartProduct
+);
+
 router.get("/checkout", isAuthenticated, shopController.getCheckoutPage);
 
 router.get("/orders", isAuthenticated, shopController.getOrdersPage);
