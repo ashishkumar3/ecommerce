@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const Product = require("../models/product");
+const User = require("../models/user");
 // get products route controller
 
 // get the index page
@@ -37,8 +39,33 @@ exports.getCartPage = (req, res, next) => {
 
 exports.addToCart = (req, res, next) => {
   const productId = req.body.productId;
-  console.log("product added to cart", productId);
-  res.redirect("/");
+  User.findById(req.user._id)
+    .then(user => {
+      const cartProductIndex = user.cart.items.findIndex(
+        item => item.productId.toString() === productId.toString()
+      );
+      console.log(cartProductIndex);
+
+      let newQuantity = 1;
+
+      if (cartProductIndex >= 0) {
+        // product exists in cart so increment quantity
+        user.cart.items[cartProductIndex].quantity += 1;
+      } else {
+        // product does not exists in cart so add product in cart
+        user.cart.items.push({
+          productId: productId,
+          quantity: newQuantity
+        });
+      }
+
+      return user.save();
+    })
+    .then(result => {
+      console.log(result);
+      res.redirect("/cart");
+    })
+    .catch(err => console.log(err));
 };
 
 // get the checkout page
