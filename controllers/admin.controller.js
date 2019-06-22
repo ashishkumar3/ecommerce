@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const { validationResult } = require("express-validator");
 
 /*
  ************************GET ADD PRODUCT PAGE*************************
@@ -25,8 +26,26 @@ exports.postAddProduct = (req, res, next) => {
 
   let { name, price, description } = req.body;
 
-  let image = req.file;
+  let errors = validationResult(req);
 
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render("admin/add-product", {
+      errors: errors.array(),
+      path: "/admin/add-product",
+      pageTitle: "Add Product",
+      oldInputs: {
+        name: name,
+        description: description,
+        price: price
+      },
+      isAuthenticated: req.session.isLoggedIn,
+      user: req.user
+    });
+  }
+
+  let image = req.file;
+  console.log(image, "imageeeee");
   if (!image) {
     req.flash("error", "File should be an image");
     return res.status(422).render("admin/add-product", {
@@ -37,15 +56,11 @@ exports.postAddProduct = (req, res, next) => {
     });
   }
 
-  console.log(image);
-
-  let errors = [];
-
   const product = new Product({
     name: name,
     description: description,
     price: price,
-    imageUrl: image,
+    imageUrl: "/" + image.path,
     userId: req.user._id
   });
 
@@ -58,7 +73,7 @@ exports.postAddProduct = (req, res, next) => {
       }
       req.flash("success_msg", "New product added");
       console.log(productDoc);
-      res.status(201).redirect("/");
+      res.status(201).redirect("/admin/products");
     })
     .catch(err => {
       console.log("err", err);

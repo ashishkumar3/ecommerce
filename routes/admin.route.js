@@ -10,7 +10,24 @@ const { check } = require("express-validator/check");
 router.get("/add-product", isAuthenticated, adminController.addProductPage);
 
 // /admin/product
-router.post("/add-product", isAuthenticated, adminController.postAddProduct);
+router.post(
+  "/add-product",
+  [
+    check("name")
+      .trim()
+      .isLength({ min: 3 })
+      .withMessage("Name should be atleast 3 characters long."),
+    check("price")
+      .isNumeric()
+      .withMessage("Price should be a number"),
+    check("description")
+      .trim()
+      .isLength({ min: 8, max: 400 })
+      .withMessage("Description should be between 8 and 400 characters.")
+  ],
+  isAuthenticated,
+  adminController.postAddProduct
+);
 
 // /admin/products
 router.get("/products", isAuthenticated, adminController.getProducts);
@@ -29,6 +46,5 @@ router.post(
   isAuthenticated,
   adminController.deleteProductById
 );
-// router.get('/edit-product', );
 
 module.exports = router;

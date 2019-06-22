@@ -263,6 +263,21 @@ exports.postNewPassword = (req, res, next) => {
   const resetPasswordToken = req.body.resetPasswordToken;
   let resetUser;
 
+  // let errors = validationResult(req);
+
+  // if (!errors.isEmpty()) {
+  //   console.log(errors.array());
+  //   return res.status(422).render("auth/signup", {
+  //     errors: errors.array(),
+  //     path: "/signup",
+  //     pageTitle: "Signup",
+  //     oldInputs: {
+  //       email: email,
+  //       name: name
+  //     }
+  //   });
+  // }
+
   User.findOne({
     resetPasswordToken: resetPasswordToken,
     resetTokenExpiration: { $gt: Date.now() },
