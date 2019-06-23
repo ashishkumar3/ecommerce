@@ -143,7 +143,25 @@ exports.getCheckoutPage = (req, res, next) => {
 };
 
 exports.getOrdersPage = (req, res, next) => {
-  res.render("shop/orders", { pageTitle: "Orders", path: "/orders" });
+  Order.find({ "user.userId": req.user._id })
+    .then(orders => {
+      if (!orders) {
+        return res.render("shop/orders", {
+          pageTitle: "Orders",
+          path: "/orders",
+          orders: [],
+          user: req.user
+        });
+      }
+
+      res.render("shop/orders", {
+        pageTitle: "Orders",
+        path: "/orders",
+        orders: orders,
+        user: req.user
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 // get product details by passing id
