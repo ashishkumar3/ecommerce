@@ -37,5 +37,12 @@ const userSchema = new Schema({
   }
 });
 
+// METHODS
+
+userSchema.methods.clearCart = function() {
+  this.cart = { items: [] };
+  return this.save();
+};
+
 // Create model of the user schema
 module.exports = mongoose.model("User", userSchema);

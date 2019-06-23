@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
 const Product = require("../models/product");
 const User = require("../models/user");
+const Order = require("../models/order");
 // get products route controller
 
 // get the index page
@@ -28,9 +28,6 @@ exports.getCartPage = (req, res, next) => {
   User.findById(req.user._id)
     .populate("cart.items.productId")
     .then(user => {
-      // user.cart.items.map(a => console.log(a));
-      console.log(user.cart.items);
-
       if (!user) {
         return res.redirect("/");
       }
@@ -103,6 +100,36 @@ exports.postDeleteCartProduct = (req, res, next) => {
     .then(result => {
       console.log(result);
       res.redirect("/cart");
+    })
+    .catch(err => console.log(err));
+};
+
+// BUY CART ITEMS
+exports.postOrder = (req, res, next) => {
+  // console.log(req.user.cart.item.productId._doc);
+  User.findById(req.user._id)
+    .populate("cart.items.productId")
+    .then(user => {
+      const products = user.cart.items.map(item => {
+        return { product: { ...item.productId }, quantity: item.quantity };
+      });
+
+      const order = new Order({
+        products: products,
+        user: {
+          userId: req.user._id,
+          name: req.user.name
+        }
+      });
+
+      return order.save();
+    })
+    .then(result => {
+      // clear the cart
+      return req.user.clearCart();
+    })
+    .then(() => {
+      res.redirect("/orders");
     })
     .catch(err => console.log(err));
 };
