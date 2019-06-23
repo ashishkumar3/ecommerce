@@ -1,0 +1,27 @@
+<section class="pagination">
+        <div class="flex justify-center">
+          <% if(currentPage != 1){ %>
+            <a href="?page=1">
+              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">1</button>
+            </a>
+          <% } %>
+          <% if(hasPreviousPage && previousPage != 1){ %>
+            <a href="?page=<%= previousPage %>">
+              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><%= previousPage %>%></button>
+            </a>
+          <% }%>
+          <a href="?page=<%= currentPage %>">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><%= currentPage %>%></button>
+          </a>
+          <% if(hasNextPage){ %>
+            <a href="?page=<%= nextPage %>">
+              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><%= nextPage %>%></button>
+            </a>
+          <% }%>
+          <% if(lastPage !== currentPage && nextPage !== lastPage){ %>
+            <a href="?page=<%= lastPage %>">
+              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><%= lastPage %>%></button>
+            </a>
+          <% }%>
+        </div>
+      </section>
