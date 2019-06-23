@@ -114,6 +114,10 @@ exports.postOrder = (req, res, next) => {
         return { product: { ...item.productId }, quantity: item.quantity };
       });
 
+      if (user.cart.items.length < 1) {
+        return res.redirect("/cart");
+      }
+
       const order = new Order({
         products: products,
         user: {
