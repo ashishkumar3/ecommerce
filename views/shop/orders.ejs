@@ -9,10 +9,10 @@
     <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
     <% orders.forEach(order => { %>
       <div class="p-4 border">
-        <div class="font-bold text-xl">Order #<%= order._id %></div>
+        <div class="font-bold text-xl">Order #<%= order._id %>----<a class="text-blue-700" href="/orders/<%= order._id %>">Invoice</a></div>
         <% order.products.forEach(product => { %>
           <div class="border p-4 text-lg">
-            <%= product.product.name %> (<%= product.quantity %>)
+            <%= product.product.name %> (<%= product.quantity %>) 
           </div>
         <% }); %>
       </div>

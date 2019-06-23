@@ -23,6 +23,8 @@ router.get("/checkout", isAuthenticated, shopController.getCheckoutPage);
 
 router.get("/orders", isAuthenticated, shopController.getOrdersPage);
 
+router.get("/orders/:orderId", isAuthenticated, shopController.getInvoice);
+
 // get about page
 router.get("/about", shopController.getAboutPage);
 

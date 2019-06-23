@@ -1,6 +1,10 @@
 const Product = require("../models/product");
 const User = require("../models/user");
 const Order = require("../models/order");
+const path = require("path");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+
 // get products route controller
 
 // get the index page
@@ -193,4 +197,68 @@ exports.getProductById = (req, res, next) => {
 // get the about page
 exports.getAboutPage = (req, res, next) => {
   res.render("shop/about", { pageTitle: "About", path: "/about" });
+};
+
+// get invoice
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  console.log(orderId);
+  Order.findById(orderId)
+    .then(orders => {
+      if (!orders) {
+        console.log("order does not exists");
+        return res.redirect("/");
+      }
+
+      if (orders.user.userId.toString() !== req.user._id.toString()) {
+        console.log("restricted");
+        return res.redirect("/");
+      }
+
+      const invoiceName = "invoice-" + orderId + ".pdf";
+      const invoicePath = path.join("data", "invoices", invoiceName);
+
+      // create a pdf doc
+      const pdfDoc = new PDFDocument();
+
+      // set headers
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        'inline; filename="' + invoiceName + '"'
+      );
+
+      // pipe it to write on invoicepath
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
+
+      // write pdf
+      pdfDoc.fontSize(32).text("Invoice", {
+        underline: true
+      });
+
+      pdfDoc.text("----------------------------");
+      let totalAmount = 0;
+      orders.products.forEach(product => {
+        totalAmount += product.product.price * product.quantity;
+        pdfDoc
+          .fontSize(16)
+          .text(
+            product.product.name +
+              "---------- (" +
+              product.quantity +
+              ") x" +
+              product.product.price +
+              "-----" +
+              product.quantity * product.product.price
+          );
+      });
+      pdfDoc
+        .fontSize(24)
+        .text("Total Amount" + "---------------------- $" + totalAmount);
+
+      pdfDoc.end();
+      console.log(orderId);
+    })
+    .catch(err => console.log(err));
 };
