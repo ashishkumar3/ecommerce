@@ -21,6 +21,8 @@ router.post("/post-order", isAuthenticated, shopController.postOrder);
 
 router.get("/checkout", isAuthenticated, shopController.getCheckoutPage);
 
+// router.post("/pay-now", isAuthenticated, shopController.payNow);
+
 router.get("/orders", isAuthenticated, shopController.getOrdersPage);
 
 router.get("/orders/:orderId", isAuthenticated, shopController.getInvoice);

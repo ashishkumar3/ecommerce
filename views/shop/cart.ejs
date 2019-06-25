@@ -39,7 +39,9 @@
       </div>
     <div class="w-1/5">
       <div class="m-4">
-        <form action="/post-order" method="POST">
+        <form action="/checkout" method="GET">
+          <div class="text-xl">Total: <span class="font-bold"><%= totalAmount %></span></div>
+          <div class="text-xl">Items: <span class="font-bold"><%= totalItems %></span></div>
           <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
               Proceed to buy
           </button>

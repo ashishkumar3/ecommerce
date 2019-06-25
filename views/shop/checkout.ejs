@@ -1,0 +1,33 @@
+<%- include('../partials/head'); %>
+</head>
+<body>
+<%- include('../partials/navigation'); %>
+<%- include('../partials/sliding-navigation'); %>
+
+<div class="main flex border justify-center">
+  <%- include('../partials/sidemenu'); %>
+  <div class="md:w-5/6">
+    <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
+    <div>
+      <%= totalAmount %>
+    </div>
+    <div>
+      <form action="/post-order" method="POST">
+          <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_XznUUqFw6pbQEP04T3TEHeUK00DatyA26A"
+          data-amount="<%= totalAmount*100 %>"
+          data-name="Your Order"
+          data-description="All the items you have ordered"
+          data-image=""
+          data-locale="auto"
+          data-currency="inr"
+        >
+        </script>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      </form>
+    </div>
+</div>
+</div>
+<%- include('../partials/footer'); %>
+  <%- include('../partials/end'); %>

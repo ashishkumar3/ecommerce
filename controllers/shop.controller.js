@@ -5,6 +5,8 @@ const path = require("path");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 
+const stripe = require("stripe")("sk_test_qerEXYatX9FtM6YlQKR0jfH800ubTCQ2Jl");
+
 const ITEMS_PER_PAGE = 2;
 
 // get products route controller
@@ -54,11 +56,22 @@ exports.getCartPage = (req, res, next) => {
       if (!user) {
         return res.redirect("/");
       }
+
+      let totalAmount = 0,
+        totalItems = 0;
+
+      user.cart.items.forEach(product => {
+        totalAmount += product.quantity * product.productId.price;
+        totalItems += product.quantity;
+      });
+
       res.render("shop/cart", {
         pageTitle: "Cart",
         path: "/cart",
         cartItems: user.cart.items,
-        user: req.user
+        user: req.user,
+        totalAmount: totalAmount,
+        totalItems: totalItems
       });
     })
     .catch(err => console.log(err));
@@ -130,9 +143,17 @@ exports.postDeleteCartProduct = (req, res, next) => {
 // BUY CART ITEMS
 exports.postOrder = (req, res, next) => {
   // console.log(req.user.cart.item.productId._doc);
+
+  const token = req.body.stripeToken;
+  let totalAmount = 0;
+
   User.findById(req.user._id)
     .populate("cart.items.productId")
     .then(user => {
+      user.cart.items.forEach(p => {
+        totalAmount += p.quantity * p.productId.price;
+      });
+
       const products = user.cart.items.map(item => {
         return { product: { ...item.productId }, quantity: item.quantity };
       });
@@ -152,6 +173,13 @@ exports.postOrder = (req, res, next) => {
       return order.save();
     })
     .then(result => {
+      const charge = stripe.charges.create({
+        amount: totalAmount * 100,
+        currency: "inr",
+        description: "Description here",
+        source: token,
+        metadata: { orderId: result._id.toString() }
+      });
       // clear the cart
       return req.user.clearCart();
     })
@@ -163,10 +191,28 @@ exports.postOrder = (req, res, next) => {
 
 // get the checkout page
 exports.getCheckoutPage = (req, res, next) => {
-  res.render("shop/checkout", {
-    pageTitle: "Checkout",
-    path: "/checkout"
-  });
+  User.findById(req.user._id)
+    .populate("cart.items.productId")
+    .then(user => {
+      if (!user) {
+        return res.redirect("/");
+      }
+
+      let totalAmount = 0;
+
+      user.cart.items.forEach(product => {
+        totalAmount += product.quantity * product.productId.price;
+      });
+
+      res.render("shop/checkout", {
+        pageTitle: "Checkout",
+        path: "/checkout",
+        cartItems: user.cart.items,
+        user: req.user,
+        totalAmount: totalAmount
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getOrdersPage = (req, res, next) => {
@@ -281,3 +327,5 @@ exports.getInvoice = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+// exports.payNow = (req, res, next) => {};
