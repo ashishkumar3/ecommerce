@@ -4,11 +4,11 @@
 <%- include('../partials/navigation'); %>
 <%- include('../partials/sliding-navigation'); %>
 <%- include('../partials/bottom-nav'); %>
-<div class="main flex border justify-center">
+<div class="flex border justify-center mb-16">
   <%- include('../partials/sidemenu'); %>
   <div class="md:w-5/6">
     <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
-    <div class="border flex">
+    <div class="border flex flex-col md:flex-row">
       <div class="w-4/5">
         <% if(cartItems.length > 0){ %>
           <% cartItems.forEach(item => {%>
@@ -37,7 +37,7 @@
         <% }); %>
         <% } %>
       </div>
-    <div class="w-1/5">
+    <div class="md:w-1/5">
       <div class="m-4">
         <form action="/checkout" method="GET">
           <div class="text-xl">Total: <span class="font-bold"><%= totalAmount %></span></div>
@@ -53,5 +53,4 @@
   </div>
 </div>
 </div>
-<%- include('../partials/footer'); %>
   <%- include('../partials/end'); %>
