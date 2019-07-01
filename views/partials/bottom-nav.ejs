@@ -1,6 +1,7 @@
-<div class="flex md:hidden fixed inset-x-0 bottom-0 h-12 text-xl bg-white justify-between text-blue-500 p-4 items-center border-t">
-  <div><a href="/"><i class="fas fa-home"></i></a></div>
-  <div><a href="/cart"><i class="fas fa-shopping-cart"></i></a></div>
-  <div><a href="/dashboard"><i class="fas fa-cog"></i></a></div>
-  <div><a href="/account"><i class="fas fa-user"></i></a></div>
+<div class="flex md:hidden fixed inset-x-0 bottom-0 h-12 text-2xl bg-white justify-between text-gray-500 p-4 items-center border-t">
+  <div><a href="/"><i class="fas fa-home hover:text-blue-500" id="<%= path === '/' ? 'current': '' %>" ></i></a></div>
+  <div><a href="/cart"><i class="fas fa-shopping-cart hover:text-blue-500" id="<%= path === '/cart' ? 'current': '' %>" ></i></a></div>
+  <div><a href="/"><i class="fas fa-heart hover:text-blue-500" id="<%= path === '/account' ? 'current': '' %>" ></i></a></div>
+  <div><a href="/dashboard"><i class="fas fa-cog hover:text-blue-500" id="<%= path === '/dashboard' ? 'current': '' %>" ></i></a></div>
+  <div><a href="/account"><i class="fas fa-user hover:text-blue-500" id="<%= path === '/account' ? 'current': '' %>" ></i></a></div>
 </div>

@@ -1,23 +1,15 @@
 <div class="flex flex-col md:flex-row md:justify-between border border-b-1">
   <div class="flex flex-row justify-between">
     <div class="flex flex-row">
-      <div class="md:hidden flex">
-        <i class="fas fa-bars my-3 mx-2 py-2 text-3xl text-blue-500 " onclick="openNav()"></i>
-      </div>
       <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4 md:mx-1 md:my-3 ">
         Logo
       </a>
-      <% if(isAuthenticated){ %>
-        <a href="/cart" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded md:mx-1 md:my-3 md:hidden">
-          Cart
-        </a>
-      <% } %>
     </div>
   </div>
   <div class="text-gray-700 text-center w-full md:block border border-t-1 md:border-0">
-    <form action="" method="GET">
-      <input class="px-4 py-2 my-3 mr-0 bg-gray-300 focus:bg-white focus:border-gray-300 focus:outline-0 rounded w-3/5" type="text" placeholder="Search for products">
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <form action="/search" method="GET">
+      <input class="px-4 py-2 my-3 mr-0 bg-gray-300 focus:bg-white focus:border-gray-300 focus:outline-0 rounded w-3/5" type="text" placeholder="Search for products" name="products">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
         <i class="fas fa-search"></i>
       </button>
     </form>

@@ -33,6 +33,8 @@ router.get("/about", shopController.getAboutPage);
 // check product details
 router.get("/product/:productId", shopController.getProductById);
 
+router.get("/search", shopController.searchProduct);
+
 // router.post('/cart-delete-item');
 
 module.exports = router;

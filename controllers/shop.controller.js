@@ -329,3 +329,17 @@ exports.getInvoice = (req, res, next) => {
 };
 
 // exports.payNow = (req, res, next) => {};
+
+exports.searchProduct = (req, res, next) => {
+  const query = req.query.products;
+  console.log(typeof query);
+
+  const prod = query.split(" ")[0];
+  console.log(prod);
+  Product.find({
+    //$or: [{ name: { $regex: query } }, { description: { $regex: query } }]
+    name: { $regex: query }
+  }).then(products => {
+    console.log(products);
+  });
+};
