@@ -40,7 +40,7 @@ exports.getSignupPage = (req, res) => {
     return res.redirect("/");
   }
   res.render("auth/signup", {
-    title: "signup",
+    pageTitle: "signup",
     path: "/signup",
     oldInputs: {
       email: "",
