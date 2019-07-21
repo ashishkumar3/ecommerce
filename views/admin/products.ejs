@@ -4,18 +4,25 @@
   <%- include('../partials/navigation') %>
   <%- include('../partials/sliding-navigation') %>
 
-  <div class="main flex border justify-center">
+  <div class="main flex justify-center">
     <%- include('../partials/sidemenu'); %>
     <div class="md:w-5/6">
       <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>      
       <div class="overflow-scroll h-screen">
+      <% if(products.length === 0){%>
+        <div>
+          This seems to be empty :(
+        </div>
+      <%}%>
       <% products.forEach(product => { %>
       <div class="my-4">
-        <div class="rounded overflow-hidden shadow-lg md:flex justify-between">
-          <img class="" src="<%= product.imageUrl %>" alt="<%= product.name %>" height="150" width="200">
-          <div class="flex flex-col">
-            <div class="px-6 py-2 border border-blue-800">
-              <a href="/product/<%= product.id %>" class="hover:underline hover:text-blue-500">
+        <div class="rounded overflow-hidden shadow-lg md:flex justify-around py-4">
+          <div class="">
+            <img class="img" src="/<%= product.imageUrl %>" alt="<%= product.name %>">
+          </div>
+          <div class="flex flex-col ">
+            <div class="px-6 py-2 ">
+              <a href="/product/<%= product.id %>" class="hover:underline hover:text-blue-500 text-blue-700 font-bold">
                 <%= product.name %>
               </a>
               <p class="font-bold text-base">

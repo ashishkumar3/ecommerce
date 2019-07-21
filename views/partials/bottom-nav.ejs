@@ -1,29 +1,31 @@
 <div class="flex md:hidden fixed inset-x-0 bottom-0 h-12 text-2xl bg-white text-gray-500 p-4 items-center border-t leading-none">
-  <div class="flex flex-col border w-1/5 items-center">
+  <div class="flex flex-col border w-1/4 items-center">
     <a href="/">
       <i class="fas fa-home hover:text-blue-500" id="<%= path === '/' ? 'current': '' %>" ></i>
     </a>
     <span class="text-xs">home</span>
   </div>
-  <div class="flex flex-col border w-1/5 items-center">
+  <div class="flex flex-col border w-1/4 items-center">
     <a href="/cart">
       <i class="fas fa-shopping-cart hover:text-blue-500" id="<%= path === '/cart' ? 'current': '' %>" ></i>
     </a>
     <span class="text-xs">cart</span>
   </div>
-  <div class="flex flex-col border w-1/5 items-center">
+  <!--
+    <div class="flex flex-col border w-1/5 items-center">
     <a href="/">
-      <i class="fas fa-heart hover:text-blue-500" id="<%= path === '/account' ? 'current': '' %>" ></i>
+      <i class="fas fa-heart hover:text-blue-500" id="<%= path === '/liked' ? 'current': '' %>" ></i>
     </a>
     <span class="text-xs">liked</span>
   </div>
-  <div class="flex flex-col border w-1/5 items-center">
+  -->
+  <div class="flex flex-col border w-1/4 items-center">
   <a href="/dashboard">
     <i class="fas fa-cog hover:text-blue-500" id="<%= path === '/dashboard' ? 'current': '' %>" ></i>
     </a>
     <span class="text-xs">dashboard</span>
   </div>
-  <div class="flex flex-col border w-1/5 items-center">
+  <div class="flex flex-col border w-1/4 items-center">
     <a href="/account">
       <i class="fas fa-user hover:text-blue-500" id="<%= path === '/account' ? 'current': '' %>" ></i>
     </a>

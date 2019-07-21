@@ -26,6 +26,7 @@ exports.getIndexPage = (req, res, next) => {
         .limit(ITEMS_PER_PAGE);
     })
     .then(productDoc => {
+      //console.log(Math.ceil(totalItems / ITEMS_PER_PAGE));
       res.status(201).render("shop/index", {
         pageTitle: "Shop",
         path: "/",
@@ -267,7 +268,7 @@ exports.getAboutPage = (req, res, next) => {
 // get invoice
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
-  console.log(orderId);
+  //console.log(orderId);
   Order.findById(orderId)
     .then(orders => {
       if (!orders) {

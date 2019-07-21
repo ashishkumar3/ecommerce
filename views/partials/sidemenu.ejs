@@ -2,25 +2,25 @@
   <div class="mx-auto">
     <% if(isAuthenticated){ %>
       <img src="/img/portrait.jpeg" alt="" class="user-avatar" width="150" height="150">
-      <div class="text-center"><%= user.name %></div>
+      <div class="text-center capitalize"><%= user.name %></div>
     <%} %>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow bg-red-200">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow ">
     <a href="/"><i class="fas fa-home"></i> Home</a>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-indigo-300">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 ">
     <a href="/dashboard"><i class="fas fa-cog"></i> Dashboard</a>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-blue-300">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 ">
     <a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-blue-300">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 ">
     <a href="/orders"><i class="fas fa-shopping-cart"></i> Orders</a>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-green-300">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 ">
     <a href="/account"><i class="fas fa-user"></i> Account</a>
   </div>
-  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 bg-yellow-300">
+  <div class="px-6 py-4 text-gray-700 font-bold text-shadow focus:bg-blue-500 ">
     <% if(isAuthenticated) {%>
       <form action="/logout" method="POST">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">

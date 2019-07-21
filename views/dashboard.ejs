@@ -3,17 +3,14 @@
 <body>
   <%- include('partials/navigation'); %>
 <%- include('partials/bottom-nav'); %>
-  <div class="main flex border justify-center mb-16">
+  <div class="main flex justify-center mb-16">
     <%- include('partials/sidemenu'); %>
     <div class="w-full md:w-5/6">
       <div class="text-xl font-bold text-gray-700"><%= pageTitle %></div>
-      <div class="border md:w-1/5 flex flex-col md:flex-row">
-        <a href="admin/add-product" class="underline text-blue-500">Add Product</a> <br>
-        <a href="admin/products" class="underline text-blue-500">Products</a>
+      <div class=" md:w-full flex flex-col md:flex-row">
+        <a href="admin/add-product" class=" font-semibold px-4 text-blue-500">Add Product</a> <br>
+        <a href="admin/products" class=" px-4 font-semibold text-blue-500">Products</a>
       </div>
     </div>
   </div>
-
-  <%= isAuthenticated %> <br>
-  Email: <%= email %><br>
 <%- include('partials/end'); %>

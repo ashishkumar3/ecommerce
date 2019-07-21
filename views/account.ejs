@@ -11,13 +11,22 @@
         <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Username: <span class="font-normal"><%= user.name %></span></div>
         <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Email: <span class="font-normal"><%= user.email %></span></div>
         <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= user.date %></span></div>
-        <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'address' %></span></div>
-        <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'acc details' %></span></div>
-        <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'user.date' %></span></div>
+        <!--
+            <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'address' %></span></div>
+          <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'acc details' %></span></div>
+          <div class="px-4 py-2 font-bold text-gray-800 text-2xl">Account created: <span class="font-normal"><%= 'user.date' %></span></div>
+        -->
+      </div>
+      <div class="md:hidden">
+        <% if(isAuthenticated) {%>
+          <form action="/logout" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="font-bold">
+              <i class="fas fa-power-off"></i> Logout
+            </button>
+          </form>
+        <%} %>
       </div>
     </div>
   </div>
-
-  <%= isAuthenticated %> <br>
-  Email: <%= email %><br>
 <%- include('partials/end'); %>
