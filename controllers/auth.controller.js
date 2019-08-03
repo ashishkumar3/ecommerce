@@ -117,7 +117,8 @@ exports.postLoginUser = (req, res, next) => {
     errors.push({ msg: "Please fill in all the fields" });
     return res.status(409).render("auth/login", {
       errors: errors,
-      path: "/login"
+      path: "/login",
+      pageTitle: "login"
     });
   }
 
@@ -127,7 +128,8 @@ exports.postLoginUser = (req, res, next) => {
         errors.push({ msg: "Authentication Failed!" });
         return res.status(409).render("auth/login", {
           errors: errors,
-          path: "/login"
+          path: "/login",
+          pageTitle: "login"
         });
       }
 
@@ -140,7 +142,8 @@ exports.postLoginUser = (req, res, next) => {
         errors.push({ msg: "Email/password incorrect." });
         res.status(409).render("auth/login", {
           errors: errors,
-          path: "/login"
+          path: "/login",
+          pageTitle: "login"
         });
       });
     })
